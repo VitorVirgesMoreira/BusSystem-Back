@@ -12,7 +12,7 @@ namespace BusSystemWF.Entities
 
         public virtual List<Passageiro> GetPassageirosMaisVelho()
         {
-            return Viagens.SelectMany(x => x.Passageiros.Where(x => x.Idade >= 60).OrderBy(x => x.Nome)).ToList();
+            return Viagens.SelectMany(x => x.Passageiros.Where(x => x.Idade >= 60)).OrderBy(x => x.Nome).ToList();
         }
 
         public virtual void AddViagens(Viagem viagem)

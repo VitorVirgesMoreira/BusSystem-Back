@@ -21,10 +21,10 @@ namespace BusSystemWF
             InitializeComponent();
         }
 
-        private void AtualizarCsv(Passageiro passageiro)
+        private void AtualizarCsv(List<Passageiro> passageiro)
         {
             listCsv.Clear();
-            listCsv.Add(passageiro);
+            listCsv = passageiro;
         }
 
         private void AtualizarDados()
@@ -40,7 +40,7 @@ namespace BusSystemWF
                 cbxData.SelectedItem = null;
                 cbxHora.SelectedItem = null;
 
-                var passageirosOrdenados = _viagem.Passageiros.OrderBy(x => x.Nome);
+                var passageirosOrdenados = _viagem.Passageiros.OrderBy(x => x.Nome).ToList();
                 foreach (var passageiro in passageirosOrdenados)
                 {
                     var item = new ListViewItem(passageiro.Nome);
@@ -48,12 +48,12 @@ namespace BusSystemWF
                     item.SubItems.Add(passageiro.Telefone.ToString());
                     item.SubItems.Add($"R${passageiro.GetTarifa()}");
                     ListViewCSV.Items.Add(item);
-                    AtualizarCsv(passageiro);
                 }
+                AtualizarCsv(passageirosOrdenados);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Informe o filtro de pesquisa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -119,10 +119,25 @@ namespace BusSystemWF
                         using (StreamWriter sw = new StreamWriter(new FileStream(sfd.FileName, FileMode.Create), Encoding.UTF8))
                         {
                             StringBuilder sb = new StringBuilder();
-                            sb.AppendLine($"{_viagem.Data.ToString("d") ?? string.Empty};{_viagem.Hora.ToString() ?? string.Empty};{_viagem.PlacaOnibus};{_viagem.NomeMotorista};");
+                            var tipoViagem = _viagem.GetType().Name.Substring(0, 1);
+                            sb.AppendLine($"{tipoViagem};{_viagem.Data.ToString("d") ?? string.Empty};{_viagem.Hora.ToString() ?? string.Empty};{_viagem.PlacaOnibus};{_viagem.NomeMotorista};");
                             foreach (var item in listCsv)
                             {
-                                sb.AppendLine(string.Format($"{item.GetType().Name.Substring(0, 1)};{item.Nome};{item.Telefone};{item.Idade};"));
+                                var tipoPassageiro = item.GetType().Name.Substring(0, 1);
+                                if (tipoPassageiro.ToUpper() == "I")
+                                {
+                                    var idoso = (Idoso)item;
+                                    sb.AppendLine(string.Format($"{tipoPassageiro};{idoso.Nome};{idoso.Telefone};{idoso.Idade};{idoso.Rg}"));
+                                    continue;
+                                }
+                                if (tipoPassageiro.ToUpper() == "E")
+                                {
+                                    var estudante = (Estudante)item;
+                                    sb.AppendLine(string.Format($"{tipoPassageiro};{estudante.Nome};{estudante.Telefone};{estudante.Idade};{estudante.Escola}"));
+                                    continue;
+                                }
+
+                                sb.AppendLine(string.Format($"{tipoPassageiro};{item.Nome};{item.Telefone};{item.Idade};"));
                             }
                             await sw.WriteLineAsync(sb.ToString());
                             MessageBox.Show("Arquivo salvo com sucesso", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -150,8 +165,8 @@ namespace BusSystemWF
                 item.SubItems.Add(passageiro.Telefone.ToString());
                 item.SubItems.Add($"R${passageiro.GetTarifa()}");
                 ListViewCSV.Items.Add(item);
-                AtualizarCsv(passageiro);
             }
+            AtualizarCsv(todosPassageirosMaisVelhos);
         }
     }
 }

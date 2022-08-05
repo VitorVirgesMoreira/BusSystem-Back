@@ -133,9 +133,11 @@
             this.ListViewCSV.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ListViewCSV.Location = new System.Drawing.Point(19, 140);
             this.ListViewCSV.Margin = new System.Windows.Forms.Padding(2);
+            this.ListViewCSV.MaximumSize = new System.Drawing.Size(554, 266);
+            this.ListViewCSV.MinimumSize = new System.Drawing.Size(554, 266);
             this.ListViewCSV.MultiSelect = false;
             this.ListViewCSV.Name = "ListViewCSV";
-            this.ListViewCSV.Size = new System.Drawing.Size(555, 266);
+            this.ListViewCSV.Size = new System.Drawing.Size(554, 266);
             this.ListViewCSV.TabIndex = 16;
             this.ListViewCSV.UseCompatibleStateImageBehavior = false;
             this.ListViewCSV.View = System.Windows.Forms.View.Details;
@@ -243,7 +245,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
-            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.ClientSize = new System.Drawing.Size(584, 481);
             this.Controls.Add(this.lblOciosas);
             this.Controls.Add(this.lblTotalPessoasOciosas);
             this.Controls.Add(this.lblPreco);
@@ -260,7 +262,8 @@
             this.Controls.Add(this.cbxPlaca);
             this.Controls.Add(this.lblTitulo);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.MaximumSize = new System.Drawing.Size(800, 600);
+            this.MaximumSize = new System.Drawing.Size(600, 520);
+            this.MinimumSize = new System.Drawing.Size(600, 520);
             this.Name = "InfoViagens";
             this.Text = "InfoViagens";
             this.ResumeLayout(false);
