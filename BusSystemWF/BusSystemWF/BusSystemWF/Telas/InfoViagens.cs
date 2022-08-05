@@ -23,6 +23,7 @@ namespace BusSystemWF
 
         private void AtualizarCsv(Passageiro passageiro)
         {
+            listCsv.Clear();
             listCsv.Add(passageiro);
         }
 
@@ -39,7 +40,8 @@ namespace BusSystemWF
                 cbxData.SelectedItem = null;
                 cbxHora.SelectedItem = null;
 
-                foreach (var passageiro in _viagem.Passageiros)
+                var passageirosOrdenados = _viagem.Passageiros.OrderBy(x => x.Nome);
+                foreach (var passageiro in passageirosOrdenados)
                 {
                     var item = new ListViewItem(passageiro.Nome);
                     item.SubItems.Add(passageiro.Idade.ToString());
@@ -117,7 +119,7 @@ namespace BusSystemWF
                         using (StreamWriter sw = new StreamWriter(new FileStream(sfd.FileName, FileMode.Create), Encoding.UTF8))
                         {
                             StringBuilder sb = new StringBuilder();
-                            sb.AppendLine($"{_viagem.Data.ToString() ?? string.Empty};{_viagem.Hora.ToString() ?? string.Empty};{_viagem.PlacaOnibus};{_viagem.NomeMotorista};");
+                            sb.AppendLine($"{_viagem.Data.ToString("d") ?? string.Empty};{_viagem.Hora.ToString() ?? string.Empty};{_viagem.PlacaOnibus};{_viagem.NomeMotorista};");
                             foreach (var item in listCsv)
                             {
                                 sb.AppendLine(string.Format($"{item.GetType().Name.Substring(0, 1)};{item.Nome};{item.Telefone};{item.Idade};"));
